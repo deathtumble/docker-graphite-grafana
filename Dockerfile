@@ -1,19 +1,20 @@
 # DOCKER-VERSION 0.4.0
 
-from	ubuntu:trusty
+from debian:jessie
 run	apt-get -y update
 
 # Install required packages
 run	apt-get -y install python-ldap python-cairo python-django python-twisted python-django-tagging python-simplejson python-memcache python-pysqlite2 python-support python-pip gunicorn supervisor nginx-light wget
+run apt-get clean
 run	pip install whisper
 run	pip install --install-option="--prefix=/var/lib/graphite" --install-option="--install-lib=/var/lib/graphite/lib" carbon
 run	pip install --install-option="--prefix=/var/lib/graphite" --install-option="--install-lib=/var/lib/graphite/webapp" graphite-web
 
 # Grafana
-run wget https://grafanarel.s3.amazonaws.com/builds/grafana_2.0.2_amd64.deb
+run wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.6.3_amd64.deb
 run apt-get install -y adduser libfontconfig
-run dpkg -i grafana_2.0.2_amd64.deb
-run rm grafana_2.0.2_amd64.deb
+run dpkg -i grafana_4.6.3_amd64.deb
+run rm grafana_4.6.3_amd64.deb
 
 # Add graphite webapp config
 add	./initial_data.json /var/lib/graphite/webapp/graphite/initial_data.json
